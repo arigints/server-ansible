@@ -1,0 +1,14 @@
+---
+# Install Nginx (This will run ONLY for Debian-based systems)
+- name: Install Nginx (Debian only)
+  package:
+    name: "{{ nginx_package }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Start and enable Nginx service (Debian only)
+  service:
+    name: nginx
+    state: started
+    enabled: true
+  when: ansible_os_family == "Debian"
