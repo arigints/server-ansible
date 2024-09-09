@@ -1,0 +1,31 @@
+---
+- name: Install WireGuard (CentOS)
+  yum:
+    name: wireguard-tools
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install Docker Compose (Debian)
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_architecture }}"
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+  when: ansible_os_family == "Debian"
+
+- name: Clone WireGuard Docker Compose repository (Debian)
+  git:
+    repo: "{{ docker_github_url }}"
+    dest: "{{ home_dir }}"
+  when: ansible_os_family == "Debian"
+
+- name: Copy .env file to the WireGuard Docker Compose directory
+  copy:
+    src: files/.env 
+    dest: "{{ home_dir }}/server-docker/wireguard/.env"
+  when: ansible_os_family == "Debian"
+
+- name: Start WireGuard using Docker Compose (Debian)
+  command: docker-compose up -d
+  args:
+    chdir: "{{ home_dir }}/server-docker/wireguard"
+  when: ansible_os_family == "Debian"

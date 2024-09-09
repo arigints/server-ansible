@@ -1,0 +1,51 @@
+---
+- name: Install required Docker dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ docker_dependencies }}"
+
+# Add Docker GPG key and repository (Debian-based)
+- name: Add Docker GPG key (Debian-based)
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Add Docker repository (Debian-based)
+  apt_repository:
+    repo: "deb [arch=amd64] {{ docker_repo_url }} {{ ansible_distribution_release }} stable"
+    state: present
+  when: ansible_os_family == "Debian"
+
+# Update package index (Debian-based)
+- name: Update apt cache (Debian-based)
+  apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+# Add Docker repository for RedHat-based systems
+- name: Add Docker repository (RedHat-based)
+  command: yum-config-manager --add-repo {{ docker_repo_url }}
+  when: ansible_os_family == "RedHat"
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+
+# Update package index (RedHat-based)
+- name: Update yum cache (RedHat-based)
+  yum:
+    name: "*"
+    state: latest
+  when: ansible_os_family == "RedHat"
+
+# Install Docker
+- name: Install Docker
+  package:
+    name: "{{ docker_package }}"
+    state: present
+
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
