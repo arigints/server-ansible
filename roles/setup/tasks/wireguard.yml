@@ -33,7 +33,6 @@
     name:
       - wireguard
       - wireguard-tools
-      - linux-headers-$(uname -r)
     state: present
 
 - name: Enable IP forwarding
