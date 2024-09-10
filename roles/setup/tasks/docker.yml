@@ -12,11 +12,11 @@
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Add Docker repository (Debian-based)
+- name: Add Docker Repository (Debian)
   apt_repository:
-    repo: "deb [arch=amd64] {{ docker_repo_url }} {{ ansible_distribution_release }} stable"
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
     state: present
-  when: ansible_os_family == "Debian"
+  when: ansible_distribution == 'Debian'
 
 # Update package index (Debian-based)
 - name: Update apt cache (Debian-based)
@@ -49,3 +49,12 @@
     name: docker
     state: started
     enabled: true
+
+- name: Display the Ansible user
+  debug:
+    msg: "The Ansible user is {{ ansible_user }}"
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker

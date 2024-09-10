@@ -8,11 +8,11 @@
     state: present
   when: git_package is defined
 
-- name: Include task to install WireGuard
+- name: Include task to install Docker
   include_tasks: docker.yml
 
-- name: Include task to configure WireGuard
-  include_tasks: setup.yml
+- name: Include task to install WireGuard
+  include_tasks: wireguard.yml
 
-- name: Include task to start WireGuard
+- name: Include task to Install Nginx
   include_tasks: nginx.yml
