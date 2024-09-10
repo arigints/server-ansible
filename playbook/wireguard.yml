@@ -1,7 +1,7 @@
 ---
 - name: Install Wireguard service
   hosts: biznet
-  become: true
+  become: yes
 
   tasks:
     - name: Enable EPEL repository

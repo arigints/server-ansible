@@ -4,11 +4,11 @@
   package:
     name: "{{ nginx_package }}"
     state: present
-  when: ansible_os_family == "Debian"
+  when: ansible_nodename== "cloud-server1"
 
 - name: Start and enable Nginx service (Debian only)
   service:
     name: nginx
     state: started
     enabled: true
-  when: ansible_os_family == "Debian"
+  when: ansible_nodename== "cloud-server1"

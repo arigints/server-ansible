@@ -1,0 +1,2 @@
+docker_github_url: "https://oauth2:<token>@github.com/arigints/server-docker.git"
+home_dir: /home/arigints
