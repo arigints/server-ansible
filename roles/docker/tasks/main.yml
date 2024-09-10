@@ -1,0 +1,22 @@
+---
+# Install Docker
+# - name: Install Docker
+#   ansible.builtin.include_tasks: install-docker.yml
+
+# Clone the GitHub repository with Docker Compose files
+- name: Clone GitHub repository
+  ansible.builtin.git:
+    repo: "{{ docker_github_url }}"
+    dest: "{{ home_dir }}/server-docker"
+    force: yes
+    version: main
+  when: apps is defined
+
+# Deploy the apps using Docker Compose
+- name: Deploy application using Docker Compose
+  ansible.builtin.shell: |
+    docker-compose up -d
+  args:
+    chdir: "{{ home_dir }}/server-docker/{{ item }}"
+  loop: "{{ apps }}"
+  notify: Restart Docker Compose

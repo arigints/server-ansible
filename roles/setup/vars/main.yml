@@ -1,2 +1,14 @@
+---
+package_manager: apt
+docker_repo_url: https://download.docker.com/linux/ubuntu
+git_package: git
+nginx_package: nginx
+docker_package: docker-ce
+docker_dependencies:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+
 docker_github_url: "https://oauth2:<token>@github.com/arigints/server-docker.git"
 home_dir: /home/arigints

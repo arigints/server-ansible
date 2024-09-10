@@ -10,33 +10,33 @@
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
-  when: ansible_os_family == "Debian"
+  #when: ansible_os_family == "Debian"
 
 - name: Add Docker Repository (Debian)
   apt_repository:
     repo: 'deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
     state: present
-  when: ansible_distribution == 'Debian'
+  #when: ansible_distribution == 'Debian'
 
 # Update package index (Debian-based)
 - name: Update apt cache (Debian-based)
   apt:
     update_cache: yes
-  when: ansible_os_family == "Debian"
+  #when: ansible_os_family == "Debian"
 
 # Add Docker repository for RedHat-based systems
-- name: Add Docker repository (RedHat-based)
-  command: yum-config-manager --add-repo {{ docker_repo_url }}
-  when: ansible_os_family == "RedHat"
-  args:
-    creates: /etc/yum.repos.d/docker-ce.repo
+# - name: Add Docker repository (RedHat-based)
+#   command: yum-config-manager --add-repo {{ docker_repo_url }}
+#   when: ansible_os_family == "RedHat"
+#   args:
+#     creates: /etc/yum.repos.d/docker-ce.repo
 
 # Update package index (RedHat-based)
-- name: Update yum cache (RedHat-based)
-  yum:
-    name: "*"
-    state: latest
-  when: ansible_os_family == "RedHat"
+# - name: Update yum cache (RedHat-based)
+#   yum:
+#     name: "*"
+#     state: latest
+#   when: ansible_os_family == "RedHat"
 
 # Install Docker
 - name: Install Docker

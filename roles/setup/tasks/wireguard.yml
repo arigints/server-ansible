@@ -1,41 +1,66 @@
 ---
-- name: Enable EPEL repository
-  yum:
-    name: epel-release
-    state: present
-  when: ansible_os_family == "RedHat"
+# - name: Enable EPEL repository
+#   yum:
+#     name: epel-release
+#     state: present
+#   when: ansible_os_family == "RedHat"
 
-- name: Import ELRepo GPG key
-  rpm_key:
-    state: present
-    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
-  when: ansible_os_family == "RedHat"
+# - name: Import ELRepo GPG key
+#   rpm_key:
+#     state: present
+#     key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+#   when: ansible_os_family == "RedHat"
 
-- name: Install ELRepo
-  yum:
-    name: "https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm"
-    state: present
-  when: ansible_os_family == "RedHat"
+# - name: Install ELRepo
+#   yum:
+#     name: "https://www.elrepo.org/elrepo-release-9.el9.elrepo.noarch.rpm"
+#     state: present
+#   when: ansible_os_family == "RedHat"
 
-- name: Install WireGuard (CentOS)
-  yum:
+# - name: Install WireGuard (CentOS)
+#   yum:
+#     update_cache: yes
+#     name: wireguard-tools
+#     state: latest
+#   when: ansible_os_family == "RedHat"
+
+- name: Update apt cache
+  apt:
     update_cache: yes
-    name: wireguard-tools
-    state: latest
-  when: ansible_os_family == "RedHat"
+
+- name: Install WireGuard and necessary dependencies
+  apt:
+    name:
+      - wireguard
+      - wireguard-tools
+      - linux-headers-$(uname -r)
+    state: present
+
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Create WireGuard configuration directory
+  file:
+    path: /etc/wireguard
+    state: directory
+    mode: '0700'
 
 - name: Clone WireGuard Docker Compose repository (Debian)
   git:
     repo: "{{ docker_github_url }}"
     dest: "{{ home_dir }}/server-docker"
     force: yes
-  when: ansible_os_family == "Debian"
+  when: ansible_nodename== "cloud-server1"
 
 - name: Copy .env file to the WireGuard Docker Compose directory
   copy:
     src: files/.env
     dest: "{{ home_dir }}/server-docker/wireguard/.env"
-  when: ansible_os_family == "Debian"
+  when: ansible_nodename== "cloud-server1"
 
 - name: Check if Docker network exists
   command: docker network ls --filter name=my_shared_network --format '{{ "{{" }} .Name {{ "}}" }}'
@@ -49,35 +74,35 @@
   command: docker compose up -d
   args:
     chdir: "{{ home_dir }}/server-docker/wireguard"
-  when: ansible_os_family == "Debian"
+  when: ansible_nodename== "cloud-server1"
 
-- name: Wireguard is started and enabled
+- name: Wireguard is stopped
   service:
     name: wg-quick@wg0
     state: stopped
-  when: ansible_os_family == "RedHat"
+  when: ansible_nodename== "home-server2"
 
 - name: Write the wireguard client config file
   template:
     src: ./files/wg0.conf
     dest: /etc/wireguard/wg0.conf
-  when: ansible_os_family == "RedHat"
+  when: ansible_nodename== "home-server2"
 
 - name: Wireguard is started and enabled
   service:
     name: wg-quick@wg0
     state: started
     enabled: true
-  when: ansible_os_family == "RedHat"
+  when: ansible_nodename== "home-server2"
 
 - name: Ping VPN gateway to check connectivity
   shell: ping -c 2 10.252.1.1
   register: ping_result
   ignore_errors: yes
-  when: ansible_os_family == "RedHat"
+  when: ansible_nodename== "home-server2"
 
 - name: Display ping results
   debug:
     msg: "{{ item }}"
   loop: "{{ ping_result.stdout_lines }}"
-  when: ansible_os_family == "RedHat"
+  when: ansible_nodename== "home-server2"
