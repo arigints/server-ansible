@@ -5,7 +5,7 @@
     - role: docker
   vars:
     apps:
-      - uptime-kuma
+      - kuma-uptime
 
 - hosts: server2
   become: yes
