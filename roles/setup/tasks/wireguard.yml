@@ -33,6 +33,7 @@
     name:
       - wireguard
       - wireguard-tools
+      - resolvconf
     state: present
 
 - name: Enable IP forwarding

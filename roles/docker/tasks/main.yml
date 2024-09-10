@@ -1,8 +1,4 @@
 ---
-# Install Docker
-# - name: Install Docker
-#   ansible.builtin.include_tasks: install-docker.yml
-
 # Clone the GitHub repository with Docker Compose files
 - name: Clone GitHub repository
   ansible.builtin.git:
@@ -10,6 +6,14 @@
     dest: "{{ home_dir }}/server-docker"
     force: yes
     version: main
+  when: apps is defined
+
+- name: Copy the environment file for each app
+  ansible.builtin.copy:
+    src: "files/{{ item }}.env"
+    dest: "{{ home_dir }}/server-docker/{{ item }}/.env"
+    mode: '0644'
+  loop: "{{ apps }}"
   when: apps is defined
 
 # Deploy the apps using Docker Compose
