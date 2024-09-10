@@ -19,7 +19,7 @@
 # Deploy the apps using Docker Compose
 - name: Deploy application using Docker Compose
   ansible.builtin.shell: |
-    docker-compose up -d
+    docker compose up -d
   args:
     chdir: "{{ home_dir }}/server-docker/{{ item }}"
   loop: "{{ apps }}"
