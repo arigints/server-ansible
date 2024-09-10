@@ -1,11 +1,10 @@
 ---
-package_manager: apt
-docker_repo_url: https://download.docker.com/linux/ubuntu
+package_manager: yum
+docker_repo_url: https://download.docker.com/linux/centos/docker-ce.repo
 git_package: git
 nginx_package: nginx
 docker_package: docker-ce
 docker_dependencies:
-  - apt-transport-https
-  - ca-certificates
-  - curl
-  - software-properties-common
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2

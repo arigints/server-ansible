@@ -9,10 +9,10 @@
   when: git_package is defined
 
 - name: Include task to install WireGuard
-  include_tasks: wireguard.yml
+  include_tasks: docker.yml
 
 - name: Include task to configure WireGuard
-  include_tasks: nginx.yml
+  include_tasks: setup.yml
 
 - name: Include task to start WireGuard
-  include_tasks: docker.yml
+  include_tasks: nginx.yml
