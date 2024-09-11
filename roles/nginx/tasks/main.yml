@@ -1,0 +1,33 @@
+---
+- name: Install Nginx
+  package:
+    name: nginx
+    state: present
+
+- name: Start and enable Nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Copy NGINX configuration file
+  copy:
+    src: files/config/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - nginx test config
+
+- name: Copy reverse proxy configurations
+  copy:
+    src: "{{ item }}"
+    dest: /etc/nginx/conf.d/
+    owner: root
+    group: root
+    mode: '0644'
+  with_fileglob:
+    - files/app/*.conf
+  notify:
+    - nginx test config

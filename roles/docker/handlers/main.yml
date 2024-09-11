@@ -1,7 +1,7 @@
 ---
 - name: Restart Docker Compose
   ansible.builtin.shell: |
-    docker-compose down && docker-compose up -d
+    docker compose down && docker compose up -d
   args:
     chdir: "{{ home_dir }}/server-docker/{{ item }}"
   loop: "{{ apps }}"
