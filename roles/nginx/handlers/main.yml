@@ -1,0 +1,12 @@
+---
+- name: nginx test config
+  command: nginx -t
+  notify:
+    - reload nginx
+  listen: "nginx test config"
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  listen: "reload nginx"
