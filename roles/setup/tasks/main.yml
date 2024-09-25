@@ -6,7 +6,7 @@
   when: git_package is defined
 - name: Set the banner
   template:
-    src: ./files/server1.txt
+    src: ./files/banner-server2.txt
     dest: /etc/motd
   when: ansible_nodename== "home-server2"
 
