@@ -8,7 +8,7 @@
       - kuma-uptime
 
 - hosts: server2
-  become: no
+  become: yes
   roles:
     - role: docker
   vars:
