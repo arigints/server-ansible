@@ -29,6 +29,9 @@ jobs:
       - name: Run a one-line script
         run: ansible-playbook playbook/nginx.yml
 
+  notify:
+    runs-on: self-hosted
+    steps:
       - name: send telegram message on push
         uses: appleboy/telegram-action@master
         with:
