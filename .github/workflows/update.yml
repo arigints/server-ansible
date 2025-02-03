@@ -23,6 +23,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
           message: |
             BUILD = ${{ needs.reload_nginx.result }}
             ${{ github.actor }} created commit: ${{ github.event.commits[0].message }}
