@@ -32,7 +32,7 @@ jobs:
   notify:
     runs-on: self-hosted
     steps:
-      - name: send telegram message on push
+      - name: send telegram message on pushh
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
