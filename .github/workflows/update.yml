@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  reload-nginx:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            BUILD = ${{ needs.build.result }}
+            BUILD = ${{ needs.reload-nginx.result }}
             ${{ github.actor }} created commit: ${{ github.event.commits[0].message }}
             
             Repository: ${{ github.repository }}
