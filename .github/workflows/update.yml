@@ -16,7 +16,7 @@ jobs:
         run: ansible-playbook playbook/nginx.yml
   notify:
     runs-on: self-hosted
-    needs: build
+    needs: reload_nginx
     steps:
       - name: send telegram message on pushh
         uses: appleboy/telegram-action@master
